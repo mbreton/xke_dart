@@ -1,0 +1,5 @@
+name:  xke_dart
+description:  A sample application
+
+dependencies:
+  unittest: { sdk: unittest }
