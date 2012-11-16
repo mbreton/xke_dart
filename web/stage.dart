@@ -15,19 +15,21 @@ class Stage {
   CanvasRenderingContext2D get ctx => _canvas.context2d;
   
   State get currentState => _currentState; 
-  set currentState (State state){
-    if (_currentState.next == null){
-      throw new UnsupportedError("The new state is null");
-    }
+  set currentState (State newState){
+    if (newState == null) throw new UnsupportedError("The new state is null");
+    
     _currentState.destroy();
-    _currentState = state;
+    _currentState = newState;
     _currentState.render();
   }
   
   Stage.fromCanvas (this._canvas){
-    _currentState = new Menu.withNext (
-                    new Playing.withNext (
-                    new GameOver ()));
+    _currentState = new Menu(ctx);
+    var playingState = new Playing(ctx);
+    var gamingState = new GameOver(ctx);
+    
+    _currentState.next = playingState;
+    playingState.next = gamingState;
   }
   
   nextState(){

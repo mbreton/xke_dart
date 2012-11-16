@@ -1,15 +1,20 @@
 part of spaceinvader;
 
 class State {
+
+  CanvasRenderingContext2D ctx2d;
   
-  State next;
   State previous;
   
-  State(){
+  State _next;
+  State get next => _next;
+  set next (State nextState){
+    _next = nextState;
+    _next.previous = this;
+    return this;
   }
   
-  State.withNext (State this.next){
-    this.next.previous = this;
+  State(this.ctx2d){
   }
   
   destroy (){
