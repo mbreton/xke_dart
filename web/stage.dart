@@ -1,50 +1,40 @@
-library spaceinvader;
-
-import 'dart:html';
-
-part 'state.dart';
-part 'menu.dart';
-part 'playing.dart';
-part 'gameover.dart';
+part of spaceinvader;
 
 class Stage {
   
-  State _currentState;
+  int _currentStateIdx=0;
+  set currentStateIdx (int val){
+    currentState.destroy();
+    _currentStateIdx = val;
+    currentState.render();
+  }
+  
+  State get currentState => states[_currentStateIdx];
+  List<State> states;
   CanvasElement _canvas;
   
   CanvasRenderingContext2D get ctx => _canvas.context2d;
   
-  State get currentState => _currentState; 
-  set currentState (State newState){
-    if (newState == null) throw new UnsupportedError("The new state is null");
-    
-    _currentState.destroy();
-    _currentState = newState;
-    _currentState.render();
-  }
-  
   Stage.fromCanvas (this._canvas){
-    _currentState = new Menu(ctx);
-    var playingState = new Playing(ctx);
-    var gamingState = new GameOver(ctx);
-    
-    _currentState.next = playingState;
-    playingState.next = gamingState;
+    states = new List<State>()
+        ..add(new Menu(ctx))
+        ..add(new Playing(ctx))
+        ..add(new GameOver(ctx));
   }
   
   nextState(){
-    currentState = _currentState.next;
+    if (_currentStateIdx == states.length-1)
+      throw new UnsupportedError("Already on the last state");
+    currentStateIdx = _currentStateIdx +1;
   }
   
   previousState(){
-    currentState = _currentState.previous;
+    if (_currentStateIdx == 0)
+      throw new UnsupportedError("Already on the fisrt state");
+    currentStateIdx = _currentStateIdx -1;
   }
   
   goToFirtState(){
-    _currentState.destroy();
-    while (_currentState.previous != null){
-      _currentState = _currentState.previous;
-    }
-    _currentState.render();
+    currentStateIdx = 0;
   }
 }
