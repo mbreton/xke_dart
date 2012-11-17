@@ -1,16 +1,23 @@
 part of spaceinvader;
 
-class State {
+class State{
 
-  CanvasRenderingContext2D ctx2d;
+  Stage _stage;
+  //Stage get stage => _stage;
   
-  State(this.ctx2d){
+  CanvasRenderingContext2D get context => _stage.canvas.getContext("2d");
+  CanvasElement get canvas => _stage.canvas;
+  
+  State(this._stage){
   }
   
   destroy (){
   }
   
   render (){
-    
+  }
+  
+  nextState (){
+    _stage.nextState();
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:html';
 
+import 'spaceinvader.dart';
+
 void main() {
-  //TODO : Point d'entrée
+  Stage stage = new Stage.fromCanvas(query('#stage'));
 }

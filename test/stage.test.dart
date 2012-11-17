@@ -23,7 +23,7 @@ void main() {
       expect(stage.nextState, throwsA(new isInstanceOf<UnsupportedError>()));
     });
     
-    test("can go to the next state and then back to return on the orginial state", () {
+    test("can go to the next state and then back to previous state", () {
       var stage = new Stage.fromCanvas (new CanvasElement());
       var state = stage.currentState;
       stage.nextState();
