@@ -1,5 +1,4 @@
 import 'dart:html';
-
 import 'spaceinvader.dart';
 
 void main() {

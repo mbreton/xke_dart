@@ -2,10 +2,21 @@ part of spaceinvader;
 
 class Menu extends State{
   
-  Menu(stage) : super(stage);
+  var keyPressHandler;
   
-  render(){
-    super.render();
+  Menu(stage) : super(stage){
+    keyPressHandler = onKeyPress;
+  }
+  
+  init (){
+    window.on.keyPress.add(keyPressHandler);
+  }
+  
+  destroy (){
+    window.on.keyPress.remove(keyPressHandler);
+  }
+  
+  render([double time]){
     context.fillStyle = "rgba(0, 0, 0, 1)";
     context.fillRect(0, 0, 600, 400);
     context.font= "normal 36px Verdana";

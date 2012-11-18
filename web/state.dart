@@ -1,26 +1,34 @@
 part of spaceinvader;
 
-abstract class State{
-
-  Stage _stage;
-  var keyPressHandler;
+abstract class State extends Drawable{
   
-  CanvasRenderingContext2D get context => _stage.canvas.getContext("2d");
+  static const width= 600;
+  static const height= 400;
+  List<Drawable> drawables;
   
-  State(this._stage){
-    keyPressHandler = onKeyPress;
+  State(stage) : super(stage){
+    drawables = new List<Drawable>();
+    x = 0;
+    y = 0;
   }
   
-  destroy (){
-    window.on.keyPress.remove(keyPressHandler);
+  render([double time]){
+    drawables.forEach((drawable) => drawable.updateRender(time));
   }
   
-  render (){
-    window.on.keyPress.add(keyPressHandler);
+  destroy(){
+    drawables.forEach((drawable) => drawable.destroy());
+    drawables.clear();
   }
   
-  onKeyPress (KeyboardEvent event);
+  addToRenderingCycle(Drawable drawable){
+    drawables.add(drawable);
+  }
   
-  nextState () => _stage.nextState();
-  previousState() => _stage.previousState();
+  removeFromRenderingCycle(Drawable drawable){
+    drawables.removeAt(drawables.indexOf(drawable));
+  }
+  
+  nextState () => stage.nextState();
+  previousState() => stage.previousState();
 }

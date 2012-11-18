@@ -9,7 +9,7 @@ class Stage {
       if (val > states.length-1 || val < 0) return;// throw new UnsupportedError("");
       currentState.destroy();
       _currentStateIdx = val;
-      currentState.render();
+      currentState.init();
     }
   }
   
@@ -21,10 +21,16 @@ class Stage {
   
   Stage.fromCanvas (this.canvas){
     states = new List<State>()
-        ..add(new Menu(this))
-        ..add(new Playing(this))
-        ..add(new GameOver(this));
-    currentState.render();
+              ..add(new Menu(this))
+              ..add(new Playing(this))
+              ..add(new GameOver(this));
+    currentState.init();
+    window.requestAnimationFrame(runLoop);
+  }
+  
+  runLoop (double time){
+    currentState.render(time);
+    window.requestAnimationFrame(runLoop);
   }
   
   nextState() => currentStateIdx = _currentStateIdx +1;
