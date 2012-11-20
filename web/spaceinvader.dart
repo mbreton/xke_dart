@@ -10,3 +10,4 @@ part 'gameover.dart';
 part 'drawable.dart';
 part 'ship.dart';
 part 'alien.dart';
+part 'missile.dart';

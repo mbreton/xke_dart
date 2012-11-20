@@ -19,12 +19,14 @@ class Ship extends Drawable{
   }
   
   render([double time]){
+    super.render(time);
     if (imgLoaded){
       context.drawImage(img,x,y, width, height);
     }
   }
   
   destroy (){
+    super.destroy();
     window.on.keyDown.remove(onKeyDown);
   }
   
@@ -34,15 +36,16 @@ class Ship extends Drawable{
     } else if (event.keyCode == KeyCode.RIGHT){ 
       moveRight();
     }
+    if (event.keyCode == KeyCode.SPACE){
+      addToRenderingCycle(new Missile (stage, x+(width/2), y));
+    }
   }
   
   moveLeft (){
-    print('moveLeft');
     x -= SPEED;  
   }
   
   moveRight (){
-    print('moveRight');
     x += SPEED;
   }
 }
