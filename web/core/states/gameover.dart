@@ -12,7 +12,7 @@ class GameOver extends State{
     window.on.keyPress.add(keyPressHandler);
   }
   
-  render([double elapsedTime]){
+  render(time){
     context.fillStyle = "rgba(0, 0, 0, 1)";
     context.fillRect(0, 0, 600, 400);
     context.font= "normal 36px Verdana";

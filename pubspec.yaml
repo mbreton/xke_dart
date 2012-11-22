@@ -1,5 +1,5 @@
 name:  xke_dart
-description:  A sample application
+description:  Spaceinvaders are comming in Dart !
 
 dependencies:
   unittest: { sdk: unittest }

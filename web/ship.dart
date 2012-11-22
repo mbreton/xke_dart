@@ -2,27 +2,20 @@ part of spaceinvader;
 
 class Ship extends Drawable{
   
-  const IMG_PATH= '_/img/ship.png';
-  static const width= 40;
-  static const height= 30;
+  static num width= 40;
+  static num height= 30;
   static const SPEED= 10;
-  var img;
   var keyDownHandler;
-  var imgLoaded= false;
+  var shipImg = (new Resources()).getImg(Resources.SHIP);
   
   Ship(Stage stage, [num x, num y]) : super(stage, x, y){
-    img = new Element.tag('img');
-    img.on.load.add((event) =>  imgLoaded=true);
-    img.src = IMG_PATH;
     keyDownHandler = onKeyDown;
     window.on.keyDown.add(onKeyDown);
   }
   
-  render([double time]){
+  render(time){
     super.render(time);
-    if (imgLoaded){
-      context.drawImage(img,x,y, width, height);
-    }
+    context.drawImage(shipImg, x, y, width, height);
   }
   
   destroy (){
@@ -37,7 +30,7 @@ class Ship extends Drawable{
       moveRight();
     }
     if (event.keyCode == KeyCode.SPACE){
-      addToRenderingCycle(new Missile (stage, x+(width/2), y));
+      stage.addToRenderingCycle(new Missile (stage, x+(width/2), y));
     }
   }
   
