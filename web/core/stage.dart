@@ -19,12 +19,17 @@ class Stage {
   State get currentState => states[_currentStateIdx];
   List<State> states;
   CanvasElement canvas;
-  var res = new Resources ();
+  var res;
   List<Drawable> drawables = new List<Drawable>();
   
   CanvasRenderingContext2D get ctx => canvas.context2d;
   
   Stage.fromCanvas (this.canvas){
+    res = new ResourceLoader.fromImagePaths([Images.SHIP,
+                                     Images.ALIEN,
+                                     Images.BAD_ALIEN,
+                                     Images.MISSILE,
+                                     Images.SPACE2]);
     states = new List<State>()
               ..add(new Menu(this))
               ..add(new Playing(this))

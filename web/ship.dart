@@ -6,16 +6,17 @@ class Ship extends Drawable{
   static num height= 30;
   static const SPEED= 10;
   var keyDownHandler;
-  var shipImg = (new Resources()).getImg(Resources.SHIP);
+  var img; 
   
   Ship(Stage stage, [num x, num y]) : super(stage, x, y){
     keyDownHandler = onKeyDown;
     window.on.keyDown.add(onKeyDown);
+    img = res[Images.SHIP];
   }
   
   render(time){
     super.render(time);
-    context.drawImage(shipImg, x, y, width, height);
+    context.drawImage(img, x, y, width, height);
   }
   
   destroy (){
@@ -25,20 +26,12 @@ class Ship extends Drawable{
   
   onKeyDown (KeyboardEvent event){
     if (event.keyCode == KeyCode.LEFT){ 
-      moveLeft();
+      x -= SPEED;
     } else if (event.keyCode == KeyCode.RIGHT){ 
-      moveRight();
+      x += SPEED;
     }
     if (event.keyCode == KeyCode.SPACE){
       stage.addToRenderingCycle(new Missile (stage, x+(width/2), y));
     }
-  }
-  
-  moveLeft (){
-    x -= SPEED;  
-  }
-  
-  moveRight (){
-    x += SPEED;
   }
 }

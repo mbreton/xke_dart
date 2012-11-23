@@ -14,8 +14,10 @@ part 'states/playing.dart';
 part 'states/gameover.dart';
 
 // models
+part '../images.dart';
+part '../resource_loader.dart';
+
 part '../ship.dart';
 part '../alien.dart';
 part '../very_bad_alien.dart';
 part '../missile.dart';
-part '../resources.dart';

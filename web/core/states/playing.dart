@@ -22,7 +22,7 @@ class Playing extends State{
   }
   
   render(time){
-    context.drawImage(res.getImg(Resources.SPACE2), 0, 0);
+    context.drawImage(res[Images.SPACE2], 0, 0, width, height);
     
     var timeSinceAlienSpawning = time - lastTimeAlienSpawning;
     if (timeSinceAlienSpawning > MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING){

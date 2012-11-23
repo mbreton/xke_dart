@@ -6,11 +6,7 @@ class VeryBadAlien extends Alien{
   
   VeryBadAlien.fromAlien (Alien alien) : super(alien.stage, alien.x, alien.y){
     sens = alien.sens;
-    img = res.getImg(Resources.BAD_ALIEN);
-  }
-  
-  render(time){
-    super.render(time);
+    img = res[Images.BAD_ALIEN];
   }
   
   mutate (){

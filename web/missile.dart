@@ -5,9 +5,10 @@ class Missile extends Drawable{
   static num width= 5;
   static num height= 10;
   static const SPEED= 10;  
-  var img = (new Resources()).getImg(Resources.MISSILE);
+  var img;
 
   Missile(Stage stage, [num x, num y]) : super(stage, x, y){
+    img = res[Images.MISSILE];
   }
   
   render (time){

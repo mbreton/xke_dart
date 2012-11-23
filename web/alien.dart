@@ -10,12 +10,9 @@ class Alien extends Drawable{
   var img;
   
   Alien(Stage stage, [num x, num y]) : super(stage, x, y){
-    img = res.getImg(Resources.ALIEN);
+    img = res[Images.ALIEN];
   }
-  
-  init(){
-  }
-  
+ 
   render(time){
     context.drawImage(img, x, y);
     if (x + width >= Stage.width || x < 0){
