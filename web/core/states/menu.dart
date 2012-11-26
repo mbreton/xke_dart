@@ -9,6 +9,7 @@ class Menu extends State{
   }
   
   init (){
+    Publisher.updateScore (0);
     window.on.keyPress.add(keyPressHandler);
   }
   
@@ -17,11 +18,10 @@ class Menu extends State{
   }
   
   render(time){
-    context.fillStyle = "rgba(0, 0, 0, 1)";
-    context.fillRect(0, 0, 600, 400);
-    context.font= "normal 36px Verdana";
-    context.fillStyle= "#FFFFFF";
-    context.fillText("Press space bar to begin ...", 50, 190);
+    super.render(time);
+    context.fillStyle = 'white';
+    context.font = "24pt Helvetica";
+    context.fillText("Press space to start", 140, 200);
   }
   
   onKeyPress (KeyboardEvent event){

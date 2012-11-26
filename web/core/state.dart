@@ -2,10 +2,15 @@ part of spaceinvader;
 
 abstract class State extends Stagable{
   
-  num get width => Stage.width;
-  num get height => Stage.height;
+  int get width => Stage.width;
+  int get height => Stage.height;
   
   State(stage):super(stage){
+  }
+  
+  render (time){
+    context.fillStyle = "black";
+    context.fillRect(0, 0, width, height);
   }
   
   destroy(){

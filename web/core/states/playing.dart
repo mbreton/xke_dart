@@ -2,7 +2,7 @@ part of spaceinvader;
 
 class Playing extends State{
   
-  const MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING = 400;
+  const MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING = 600;
   const DURATION_TO_MUTATE_ALIEN = 10000;
   
   double lastTime = 0.0;
@@ -10,6 +10,7 @@ class Playing extends State{
   double timeSinceMutation= 0.0;
   List<Alien> aliens;
   Ship ship;
+  int score=0;
   
   Playing(stage) : super(stage){
     
@@ -17,7 +18,7 @@ class Playing extends State{
   
   init (){
     aliens = new List ();
-    ship = new Ship (stage, width/2-Ship.width, height-Ship.height);
+    ship = new Ship (stage, (width/2-Ship.width).toInt(), height-Ship.height);
     stage.addToRenderingCycle(ship);
   }
   
@@ -48,19 +49,26 @@ class Playing extends State{
       aliens = newAliens;
     }
     stage.drawables.forEach((drawable){
-      if (drawable is Missile){
+      if (drawable is Projectile){
         aliens.forEach( (Alien alien) {
-          if ((drawable as Missile).hasCollisionWith(alien)){
+          if ((drawable as Projectile).hasCollisionWith(alien)){
             drawable.destroy();
             alien.decreaseLive();
             if (!alien.isAlive()){
               alien.destroy();
               aliens.removeAt(aliens.indexOf(alien));
+              score += 10;
             }
           }
         });
       }
     });
-    lastTime = time;    
+    aliens.forEach( (Alien alien) {
+      if (alien.y + Alien.height > Stage.height){
+        stage.nextState();
+      }
+    });
+    lastTime = time;
+    Publisher.updateScore (score);
   }
 }

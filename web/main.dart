@@ -1,6 +1,9 @@
 import 'dart:html';
 import 'core/spaceinvader.dart';
 
+Stage stage = null;
+
 void main() {
-  Stage stage = new Stage.fromCanvas(query('#stage'));
+  // A supprimer
+  stage = new Stage.fromCanvas(query('#stage'));
 }

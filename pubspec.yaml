@@ -3,3 +3,4 @@ description:  Spaceinvaders are comming in Dart !
 
 dependencies:
   unittest: { sdk: unittest }
+  js: { hosted: js }

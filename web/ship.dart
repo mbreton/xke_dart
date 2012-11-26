@@ -2,36 +2,37 @@ part of spaceinvader;
 
 class Ship extends Drawable{
   
-  static num width= 40;
-  static num height= 30;
+  static int width= 34;
+  static int height= 25;
   static const SPEED= 10;
-  var keyDownHandler;
+  
+  var keyUpHandler;
+  double lastProjectileSpwaningTime = 0.0;
   var img; 
   
-  Ship(Stage stage, [num x, num y]) : super(stage, x, y){
-    keyDownHandler = onKeyDown;
-    window.on.keyDown.add(onKeyDown);
+  Ship(Stage stage, [int x, int y]) : super(stage, x, y){
+    keyUpHandler = onKeyUp;
+    window.on.keyUp.add(onKeyUp);
     img = res[Images.SHIP];
   }
   
   render(time){
-    super.render(time);
     context.drawImage(img, x, y, width, height);
   }
   
   destroy (){
     super.destroy();
-    window.on.keyDown.remove(onKeyDown);
+    window.on.keyUp.remove(onKeyUp);
   }
   
-  onKeyDown (KeyboardEvent event){
-    if (event.keyCode == KeyCode.LEFT){ 
-      x -= SPEED;
+  onKeyUp (KeyboardEvent event){
+    if (event.keyCode == KeyCode.LEFT){
+      if (x - SPEED >=  0) x -= SPEED;
     } else if (event.keyCode == KeyCode.RIGHT){ 
-      x += SPEED;
+      if (x+width + SPEED <=  Stage.width) x += SPEED;
     }
     if (event.keyCode == KeyCode.SPACE){
-      stage.addToRenderingCycle(new Missile (stage, x+(width/2), y));
+        stage.addToRenderingCycle(new Projectile (stage, (x+(width/2)).toInt(), y));
     }
   }
 }

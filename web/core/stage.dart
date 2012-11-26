@@ -2,8 +2,8 @@ part of spaceinvader;
 
 class Stage {
   
-  static num width= 600;
-  static num height= 400;
+  static int width= 600;
+  static int height= 400;
   
   int _currentStateIdx=0;
   set currentStateIdx (int val){
@@ -40,7 +40,7 @@ class Stage {
   
   runLoop (double time){
     currentState.render(time);
-    drawables.forEach((drawable) => drawable.render(time));
+    drawables.forEach((drawable) => drawable.refresh(time));
     window.requestAnimationFrame(runLoop);
   }
   
@@ -55,6 +55,10 @@ class Stage {
   removeAllFromRenderingCycle (){
     drawables.forEach((drawable) => drawable.destroy());
     drawables.clear();
+  }
+  
+  formatPointLabel (){
+    return "666 points";
   }
   
   nextState() => currentStateIdx = _currentStateIdx +1;

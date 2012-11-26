@@ -1,13 +1,13 @@
 part of spaceinvader;
 
-class Missile extends Drawable{
+class Projectile extends Drawable{
   
   static num width= 5;
   static num height= 10;
   static const SPEED= 10;  
   var img;
 
-  Missile(Stage stage, [num x, num y]) : super(stage, x, y){
+  Projectile(Stage stage, [int x, int y]) : super(stage, x, y){
     img = res[Images.MISSILE];
   }
   
@@ -15,7 +15,7 @@ class Missile extends Drawable{
     if (y < 0){
       destroy();
     } else{
-      y -= 10;
+      y -= (0.5 * time).toInt();
       context.drawImage(img, x, y);
     }
   }

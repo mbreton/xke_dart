@@ -13,11 +13,10 @@ class GameOver extends State{
   }
   
   render(time){
-    context.fillStyle = "rgba(0, 0, 0, 1)";
-    context.fillRect(0, 0, 600, 400);
-    context.font= "normal 36px Verdana";
-    context.fillStyle= "#FFFFFF";
-    context.fillText("You loose ! Press space bar to restart ...", 1, 190, 599);
+    super.render(time);
+    context.fillStyle = 'white';
+    context.font = "24pt Helvetica";
+    context.fillText("You Lose ! Press space to restart", 80, 200);
   }
   
   destroy (){

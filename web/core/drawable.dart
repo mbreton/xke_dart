@@ -2,21 +2,22 @@ part of spaceinvader;
 
 abstract class Drawable extends Stagable{
   
-  num x, y;
-  num lastX, lastY;
+  int x = 0, y= 0;
+  double _lastTime=0.0;
   static num width=0, height=0;
   
   Drawable (stage, [this.x, this.y]): super(stage);
   
   init (){}
-  render (time){}
+  render (double time){}
   destroy(){
     stage.removeFromRenderingCycle(this);
   }
   
-  updateRender(time){
-    render(time);
-    lastX = x;
-    lastY = y;
+  refresh(double time){
+    if (_lastTime != 0.0){
+      render(time-_lastTime);
+    }
+    _lastTime = time;
   }
 }
