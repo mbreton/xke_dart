@@ -35,3 +35,6 @@ Faite passer les tests de la partie "Publisher".
 
 ### Le chargement des resources
 Si vous avez lancé la page `spaceinvader.html`, vous avez pu constater que le jeux reste en l'état "Loading …" cela viens de la classe **Resources** qui n'est pas encore implémenter. Suivez les intructions de la partie "Resources" des tests unitaires pour passer au niveau suivant !
+
+### Remerciements spéciaux
+Je remercie camille@finandsys.com pour la réalisation des sprites permettant d'afficher de magnifiques images plutôt que des rectangles rose fluos.
