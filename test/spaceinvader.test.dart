@@ -161,7 +161,7 @@ void main() {
       expect (Ship.width , equals(34));
     });
     
-    test("is instiable and inherit of Drawable", (){
+    test("is instiable and inher  it of Drawable", (){
         var ship = new Ship (stage, 0, 0);
         expect (ship is Drawable, isTrue);
     });
@@ -174,6 +174,12 @@ void main() {
     test("has 'img' property initialized with the correct ImageElement", (){
       var ship = new Ship (stage, 0, 0);
       expect (ship.img, equals(stage.resources[Images.SHIP]));
+    });
+    
+    test("go to left when left button is released", (){
+      var ship = new Ship (stage, 50, 0);
+      triggerKeyBoardEvent();
+      expect(ship.x, equals(40));
     });
   });
   
@@ -264,7 +270,7 @@ void main() {
       expect (alien.life , equals(0));
     });
     
-    test("are dead when his life is equal to zero", (){
+    test("is dead when his life is equal to zero", (){
       var alien = new Alien (stage, 0, 0);
       expect (alien.isAlive() , isTrue);
       alien.life =0;
