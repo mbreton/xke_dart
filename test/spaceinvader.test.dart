@@ -149,6 +149,34 @@ void main() {
     
   });
   
+  group ("Ship", (){
+    
+    var stage = new Stage.fromCanvas(new Element.tag('canvas'));
+    
+    test("has a static 'height' property initialized at 25", (){
+      expect (Ship.height , equals(25));
+    });
+    
+    test("has a static 'width' property initialized at 34", (){
+      expect (Ship.width , equals(34));
+    });
+    
+    test("is instiable and inherit of Drawable", (){
+        var ship = new Ship (stage, 0, 0);
+        expect (ship is Drawable, isTrue);
+    });
+    
+    /**
+     * In each Drawable is injected an instance of Resources accessible by a
+     * property called 'resource'. Remimber that you can use [] operator with
+     * one of path defined in Images class.
+     */
+    test("has 'img' property initialized with the correct ImageElement", (){
+      var ship = new Ship (stage, 0, 0);
+      expect (ship.img, equals(stage.resources[Images.SHIP]));
+    });
+  });
+  
   group ("Alien", (){
    
     var stage = new Stage.fromCanvas(new Element.tag('canvas'));
@@ -168,7 +196,7 @@ void main() {
     
     test("has 'img' property initialized with the correct ImageElement", (){
       var alien = new Alien (stage, 0, 0);
-      expect (alien.img, equals(stage.res[Images.ALIEN]));
+      expect (alien.img, equals(stage.resources[Images.ALIEN]));
     });
     
     test("implements render method, and compute x to traverse stage from left to right in 1.5s", (){
@@ -241,29 +269,6 @@ void main() {
       expect (alien.isAlive() , isTrue);
       alien.life =0;
       expect (alien.isAlive() , isFalse);
-    });
-  });
-  
-  group ("Ship", (){
-    
-    var stage = new Stage.fromCanvas(new Element.tag('canvas'));
-    
-    test("has a static 'height' property initialized at 25", (){
-      expect (Ship.height , equals(25));
-    });
-    
-    test("has a static 'width' property initialized at 34", (){
-      expect (Ship.width , equals(34));
-    });
-    
-    test("is instiable and it inherit of Drawable", (){
-        var ship = new Ship (stage, 0, 0);
-        expect (ship is Drawable, isTrue);
-    });
-    
-    test("has 'img' property initialized with the correct ImageElement", (){
-      var ship = new Ship (stage, 0, 0);
-      expect (ship.img, equals(stage.res[Images.SHIP]));
     });
   });
 }

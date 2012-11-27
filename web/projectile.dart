@@ -8,7 +8,7 @@ class Projectile extends Drawable{
   var img;
 
   Projectile(Stage stage, [int x, int y]) : super(stage, x, y){
-    img = res[Images.MISSILE];
+    img = resources[Images.MISSILE];
   }
   
   render (time){

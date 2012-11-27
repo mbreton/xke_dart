@@ -27,7 +27,7 @@ class Playing extends State{
     aliens = new List ();
     ship = new Ship (stage, (width/2-Ship.width).toInt(), height-Ship.height);
     stage.addToRenderingCycle(ship);
-    background = res[Images.SPACE2];
+    background = resources[Images.SPACE2];
     score = 0;
     Publisher.updateScore(score);
   }

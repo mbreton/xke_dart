@@ -4,7 +4,7 @@ abstract class Stagable {
   
   Stage stage;
   
-  get res => stage.res;
+  get resources => stage.resources;
   CanvasRenderingContext2D get context => stage.canvas.getContext("2d");
   
   Stagable(this.stage);

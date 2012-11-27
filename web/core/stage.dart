@@ -19,7 +19,7 @@ class Stage {
   State get currentState => states[_currentStateIdx];
   List<State> states;
   CanvasElement canvas;
-  var res;
+  var resources;
   List<Drawable> drawables = new List<Drawable>();
   var _imagePaths = [Images.SHIP,
                      Images.ALIEN,
@@ -32,7 +32,7 @@ class Stage {
   Stage.fromCanvas (this.canvas){
    if (this.canvas != null){
       Publisher.updateScore(0);
-      res = new Resources();
+      resources = new Resources();
       
       states = new List<State>()
           ..add(new Preloading(this))
@@ -42,13 +42,13 @@ class Stage {
       currentState.init();
       window.requestAnimationFrame(runLoop);
       
-      if (hasMethod(res,'loadImages')){
-        res.loadImages(_imagePaths).then((images){
+      if (hasMethod(resources,'loadImages')){
+        resources.loadImages(_imagePaths).then((images){
           if (images is List) // to check loadImages state
               nextState();
         });
       } else{
-        res = new Map<String, Element> ();
+        resources = new Map<String, Element> ();
       }
     }
   }

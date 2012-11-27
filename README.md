@@ -1,7 +1,7 @@
 XKE Dart
 ========
 
-* Le point d'entré est dans `web/main.dart`
+* Le point d'entré est dans `web/main.dart` lui-même appeler dans la page `spaceinvader.html`
 * Pour lancer un script Dart ou une page Cmd+R (ou Ctrl+R ?)
 
 ## Introduction
@@ -25,7 +25,7 @@ Une fois terminer vous pouvez admirer la résultat en lancant la page `spaceinva
 ## TDD
 
 * Regarder `web/spaceinvader.dart`
-* Et jeter un oeuil à `web/spaceinvader.test.dart`
+* Et jeter un oeil à `web/spaceinvader.test.dart`
 * Enfin l'application est visible en lançant la page `spaceinvader.html`
 
 ### Vous reprendrez bien un peu de Javascript ?

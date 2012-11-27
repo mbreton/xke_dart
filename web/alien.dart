@@ -9,7 +9,7 @@ class Alien extends Drawable{
   var img;
   
   Alien (stage, [x, y]): super(stage, x, y){
-    img = res[Images.ALIEN];
+    img = resources[Images.ALIEN];
   }
   
   render (double time){
