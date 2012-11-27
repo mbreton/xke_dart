@@ -21,21 +21,36 @@ class Stage {
   CanvasElement canvas;
   var res;
   List<Drawable> drawables = new List<Drawable>();
+  var _imagePaths = [Images.SHIP,
+                     Images.ALIEN,
+                     Images.BAD_ALIEN,
+                     Images.MISSILE,
+                     Images.SPACE2];
   
   CanvasRenderingContext2D get ctx => canvas.context2d;
   
   Stage.fromCanvas (this.canvas){
-    res = new ResourceLoader.fromImagePaths([Images.SHIP,
-                                     Images.ALIEN,
-                                     Images.BAD_ALIEN,
-                                     Images.MISSILE,
-                                     Images.SPACE2]);
-    states = new List<State>()
-              ..add(new Menu(this))
-              ..add(new Playing(this))
-              ..add(new GameOver(this));
-    currentState.init();
-    window.requestAnimationFrame(runLoop);
+   if (this.canvas != null){
+      Publisher.updateScore(0);
+      res = new Resources();
+      
+      states = new List<State>()
+          ..add(new Preloading(this))
+          ..add(new Menu(this))
+          ..add(new Playing(this))
+          ..add(new GameOver(this));
+      currentState.init();
+      window.requestAnimationFrame(runLoop);
+      
+      if (hasMethod(res,'loadImages')){
+        res.loadImages(_imagePaths).then((images){
+          if (images is List) // to check loadImages state
+              nextState();
+        });
+      } else{
+        res = new Map<String, Element> ();
+      }
+    }
   }
   
   runLoop (double time){
@@ -55,10 +70,6 @@ class Stage {
   removeAllFromRenderingCycle (){
     drawables.forEach((drawable) => drawable.destroy());
     drawables.clear();
-  }
-  
-  formatPointLabel (){
-    return "666 points";
   }
   
   nextState() => currentStateIdx = _currentStateIdx +1;

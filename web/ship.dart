@@ -12,7 +12,7 @@ class Ship extends Drawable{
   
   Ship(Stage stage, [int x, int y]) : super(stage, x, y){
     keyUpHandler = onKeyUp;
-    window.on.keyUp.add(onKeyUp);
+    window.on.keyUp.add(keyUpHandler);
     img = res[Images.SHIP];
   }
   
@@ -22,7 +22,7 @@ class Ship extends Drawable{
   
   destroy (){
     super.destroy();
-    window.on.keyUp.remove(onKeyUp);
+    window.on.keyUp.remove(keyUpHandler);
   }
   
   onKeyUp (KeyboardEvent event){

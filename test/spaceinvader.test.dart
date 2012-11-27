@@ -1,7 +1,7 @@
 import 'package:/unittest/unittest.dart';
 import 'package:/unittest/html_enhanced_config.dart';
 
-import '../web/core/spaceinvader.dart';
+import '../web/core/spaceinvader_lib.dart';
 import 'dart:html';
 import 'dart:isolate';
 import 'package:js/js.dart' as js;
@@ -13,52 +13,145 @@ void main() {
   group ("Publisher", (){
     
     /**
-     * To pass this test :
-     *  - you must implement string format, thanks to string interpolate
-     *  - you must retreive an element with 'score' for id, and fill its content
-     *  
-     *  Note:
-     *  To retrieve an HTML element in HTML call : window.document.getElementById('myId');
-     *  To set content in a HTML element, use : myElement.innerHTML = "myContent" 
+     * To valid this test
+     *  1. You must format the string like expected in the test thanks to the string interpolate
+     *  2. Call the Javascript function 'updateScoreLabel' defined in the file 'script.js' in the 
+     *     root of the project 
      * 
      * For more explanation about string interpolate in Dart:
      * http://c.dart-examples.com/api/dart-core/interfaces/comparable-hashable-pattern/string
      * 
-     * For understand how to call a js function from Dart:
+     * To understand how to call a js function from Dart:
      * http://dart-lang.github.com/js-interop/docs/js.html
      */ 
     test("update correctly the span with a given score", (){
       
+      // reset the number of call of the js function
+      js.scoped(() => js.context.nbCall = 0);
+      
       Publisher.updateScore(1);
+      js.scoped(() => expect (js.context.nbCall, equals(1)) ); // asset the number of call of JS function
       expect (query('#score').innerHTML, equals('1 Point'));
       
       Publisher.updateScore(10);
+      js.scoped(() => expect (js.context.nbCall, equals(2)) ); // asset the number of call of JS function
       expect (query('#score').innerHTML, equals('10 Points'));
     });
   });
   
   group ("Resources", (){
     
-    test("load an image", (){
-      var res = new ResourceLoader.fromImagePaths([Images.ALIEN]);
-      var timer = new Timer(500, (timer) {
-        expect(res[Images.ALIEN], isNotNull);
-      });
+    /**
+     * The maps in Dart:
+     * http://c.dart-examples.com/learn/variables/maps
+     */
+    test("has a 'imgs' map properly initialized", (){
+      var res = new Resources();
+      expect(res.imgs, isNotNull);
+      expect(res.imgs is Map, isTrue);
     });
     
-    test("load many images", (){
-      var res = new ResourceLoader.fromImagePaths([Images.ALIEN, Images.BAD_ALIEN]);
-      var timer = new Timer(500, (timer) {
-        expect(res[Images.ALIEN], isNotNull);
-      });
+    /**
+     * In this test you must just add [] operator, and because you are a killer
+     * you will use the inline closure.
+     * 
+     * How to override operator in Dart
+     * http://c.dart-examples.com/learn/operators/operator-override
+     */
+    test("has override '[]' operator to retreive Element by a String key", (){
+      var res = new Resources();
+      var expectedReturn = new Element.tag('span');
+      res.imgs['myKey'] = expectedReturn;
+      expect (res['myKey'], equals(expectedReturn));  
     });
+    
+    /**
+     * In this test you will just declare a method named 'loadImages' who will load all images
+     * necessary to draw the game. It take in parameter a list of image path and return a Future
+     * like in Java.
+     * (reminder :http://docs.oracle.com/javase/1.5.0/docs/api/java/util/concurrent/Future.html)
+     * 
+     * To declare a list in Dart:
+     * http://c.dart-examples.com/api/dart-core/interfaces/iterable/collection/list
+     * 
+     * Documentation about Future in Dart:
+     * http://api.dartlang.org/docs/bleeding_edge/dart_core/Future.html
+     * 
+     * Note:
+     * Temporaly you can return "new Future.immediate(0)" to valid test
+     */
+    test("has a method named 'loadImages' who "
+         "has a List of String named 'paths' "
+         "and return a 'Future' type", (){
+      var res = new Resources();
+      var isLoadImagesExist = hasMethod (res, 'loadImages');
+      expect(isLoadImagesExist, isTrue);
+      if (isLoadImagesExist){
+        List<String> paths = new List();
+        var result = res.loadImages(paths);
+        expect(result is Future, isTrue);
+      }
+    });
+    
+    /**
+     * The method loadImages is declared ! Now you must implement it. Hopefully the Images
+     * class implement a method called 'loadImage' which return a Future who will be trigger
+     * at the end of image loading.
+     * The goal now is to wait all images loading and return global Future like a Join-Fork in
+     * Java.
+     * To help you, you can use the 'Futures' class utility:
+     * http://api.dartlang.org/docs/bleeding_edge/dart_core/Futures.html
+     * 
+     * To build the list of Future from the 'loadImage' calls you can use 
+     * the "map" or "forEach" method of Collection API :
+     * http://api.dartlang.org/docs/bleeding_edge/dart_core/Collection.html
+     * 
+     */
+    test("loadImages return a Future instance of list", (){
+      var res = new Resources();
+      var isLoadImagesExist = hasMethod (res, 'loadImages');
+      expect(isLoadImagesExist, isTrue);
+      if (isLoadImagesExist){
+        // Then is used to run after that all asynchronous jobs are ended
+        res.loadImages([Images.ALIEN, Images.SHIP]).then((images){
+          // we check if the result of all call return a list
+          expect(images is List, isTrue);
+        });
+      }
+    });
+    
+    /**
+     * The final step is to save our images in the 'imgs' map, to allow
+     * core to retrieve Images from ressource instance.
+     * To do that you can use the 'transform' method who will be called just after
+     * that all asynchonous job are ended and just before the call of 'then'.
+     * 
+     * 'transform' will receive a list of Element, you can iterate them with a 
+     * 'forEach'. You must use 'myImage.attributes['src']' as key for your map 'imgs'
+     * 
+     * Doc:
+     * http://api.dartlang.org/docs/bleeding_edge/dart_core/Future.html
+     * 
+     */
+    test("loadImages return a Future instance of list", (){
+      var res = new Resources();
+      var isLoadImagesExist = hasMethod (res, 'loadImages');
+      expect(isLoadImagesExist, isTrue);
+      if (isLoadImagesExist){
+        // Then is used to run after that all asynchronous jobs are ended
+        res.loadImages([Images.ALIEN, Images.SHIP]).then((images){
+          // we check if the images are saved in the map
+          expect(res[Images.ALIEN], isNotNull);
+          expect(res[Images.SHIP], isNotNull);
+        });
+      }
+    });
+    
   });
   
   group ("Alien", (){
-    
+   
     var stage = new Stage.fromCanvas(new Element.tag('canvas'));
-    var resources = new ResourceLoader.fromImagePaths([(Images.ALIEN)]);
-    stage.res = resources;
     
     test("has a static 'height' property initialized at 30", (){
       expect (Alien.height , equals(30));
@@ -75,7 +168,7 @@ void main() {
     
     test("has 'img' property initialized with the correct ImageElement", (){
       var alien = new Alien (stage, 0, 0);
-      expect (alien.img, equals(resources[Images.ALIEN]));
+      expect (alien.img, equals(stage.res[Images.ALIEN]));
     });
     
     test("implements render method, and compute x to traverse stage from left to right in 1.5s", (){
@@ -154,8 +247,6 @@ void main() {
   group ("Ship", (){
     
     var stage = new Stage.fromCanvas(new Element.tag('canvas'));
-    var resources = new ResourceLoader.fromImagePaths([(Images.ALIEN)]);
-    stage.res = resources;
     
     test("has a static 'height' property initialized at 25", (){
       expect (Ship.height , equals(25));
@@ -172,7 +263,7 @@ void main() {
     
     test("has 'img' property initialized with the correct ImageElement", (){
       var ship = new Ship (stage, 0, 0);
-      expect (ship.img, equals(resources[Images.SHIP]));
+      expect (ship.img, equals(stage.res[Images.SHIP]));
     });
   });
 }
