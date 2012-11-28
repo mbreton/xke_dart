@@ -8,7 +8,6 @@ class Publisher {
   }
 }
 
-
 class Resources {
 }
 
