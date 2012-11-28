@@ -6,10 +6,6 @@ hasMethod (instance, methodName){
   return resCM.methods[methodName] != null;
 }
 
-triggerKeyBoardEvent ([code= KeyCode.LEFT]){
-  js.scoped((){
-    var e = js.context.jQuery.Event("keyup");
-    e.which = code;
-    js.context.jQuery("body").trigger(e);
-  });
+triggerKeyboardEvent (code){
+  js.scoped(() => js.context.triggerKeyboardEvent(code) );
 }

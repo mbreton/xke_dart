@@ -9,6 +9,7 @@ class Projectile extends Drawable{
 
   Projectile(Stage stage, [int x, int y]) : super(stage, x, y){
     img = resources[Images.MISSILE];
+    stage.addToRenderingCycle(this);
   }
   
   render (time){

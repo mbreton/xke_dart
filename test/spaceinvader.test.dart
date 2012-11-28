@@ -149,40 +149,6 @@ void main() {
     
   });
   
-  group ("Ship", (){
-    
-    var stage = new Stage.fromCanvas(new Element.tag('canvas'));
-    
-    test("has a static 'height' property initialized at 25", (){
-      expect (Ship.height , equals(25));
-    });
-    
-    test("has a static 'width' property initialized at 34", (){
-      expect (Ship.width , equals(34));
-    });
-    
-    test("is instiable and inher  it of Drawable", (){
-        var ship = new Ship (stage, 0, 0);
-        expect (ship is Drawable, isTrue);
-    });
-    
-    /**
-     * In each Drawable is injected an instance of Resources accessible by a
-     * property called 'resource'. Remimber that you can use [] operator with
-     * one of path defined in Images class.
-     */
-    test("has 'img' property initialized with the correct ImageElement", (){
-      var ship = new Ship (stage, 0, 0);
-      expect (ship.img, equals(stage.resources[Images.SHIP]));
-    });
-    
-    test("go to left when left button is released", (){
-      var ship = new Ship (stage, 50, 0);
-      triggerKeyBoardEvent();
-      expect(ship.x, equals(40));
-    });
-  });
-  
   group ("Alien", (){
    
     var stage = new Stage.fromCanvas(new Element.tag('canvas'));
@@ -275,6 +241,123 @@ void main() {
       expect (alien.isAlive() , isTrue);
       alien.life =0;
       expect (alien.isAlive() , isFalse);
+    });
+  });
+
+  group ("Ship", (){
+      
+    var stage = new Stage.fromCanvas(new Element.tag('canvas'));
+    
+    test("has a static 'height' property initialized at 25", (){
+      expect (Ship.height , equals(25));
+    });
+    
+    test("has a static 'width' property initialized at 34", (){
+      expect (Ship.width , equals(34));
+    });
+    
+    test("inherit of Drawable and is instiable", (){
+        var ship = new Ship (stage, 0, 0);
+        expect (ship is Drawable, isTrue);
+    });
+    
+    /**
+     * In each Drawable is injected : 
+     *  - An instance of Resources accessible by a property called 'resources'
+     *  - A 'context' variable of type CanvasRenderingContext2D
+     *  - The Stage instance (it contains the width and the height of the area)
+     *  - The current x, y position
+     *  
+     * Use resource to initialize img, remimber that you can use [] operator with
+     * one of path defined in Images class.
+     */
+    test("has an 'img' property initialized with the correct ImageElement", (){
+      var ship = new Ship (stage, 0, 0);
+      expect (ship.img, equals(stage.resources[Images.SHIP]));
+    });
+    
+    /**
+     * The 'context' variable contains a "drawImage" method
+     * Use it to draw the 'img' at x, y position, doc:
+     * http://api.dartlang.org/docs/bleeding_edge/dart_html/CanvasRenderingContext2D.html
+     */
+    test("has a 'render' method that take in arguments a double a", (){
+      var ship = new Ship (stage, 0, 0);
+      expect(hasMethod(ship, 'render'), isTrue);
+      expect(ship.render(0.0), isNull);// to test type of parameter
+    });
+    
+    test("has a 'moveLeft' method to move ship of 10 of the left", (){
+      var ship = new Ship (stage, 10, 0);
+      expect(hasMethod(ship, 'moveLeft'), isTrue);
+      ship.moveLeft();
+      expect(ship.x, equals(0));
+    });
+    
+    test("has a 'moveLeft' method to move ship of 10 of the left but doesn't move outside the stage", (){
+      var ship = new Ship (stage, 5, 0);
+      expect(hasMethod(ship, 'moveLeft'), isTrue);
+      ship.moveLeft();
+      expect(ship.x, equals(0));
+    });
+    
+    test("has a 'moveRight' method to move ship of 10 of the right", (){
+      var ship = new Ship (stage, 10, 0);
+      expect(hasMethod(ship, 'moveRight'), isTrue);
+      ship.moveRight();
+      expect(ship.x, equals(20));
+    });
+    
+    test("has a 'moveRight' method to move ship of 10 of the right but doesn't move outside the stage", (){
+      var ship = new Ship (stage, 560, 0);
+      expect(hasMethod(ship, 'moveRight'), isTrue);
+      ship.moveRight();
+      expect(ship.x, equals(600-34));
+    });
+    
+    test("has a 'fire' method who instanciate a new projectile each time", (){
+      var ship = new Ship (stage, 50, 40);
+      expect(hasMethod(ship, 'fire'), isTrue);
+      
+      // shoot two times
+      ship.fire();
+      ship.fire();
+      
+      var nbProjectileFound = 0;
+      stage.drawables.forEach((drawable) { 
+        if (drawable is Projectile){
+          var projectile = drawable as Projectile;
+          // each projectile must be instanciate in the middle on the ship
+          expect(projectile.x, equals(50+(34/2)));
+          // each projectile must be instanciate in front of the ship
+          expect(projectile.y, equals(40));
+          
+          // count number of projectile in the rendering cycle
+          ++nbProjectileFound;
+        }
+      });
+      
+      // check the number of bomb builded
+      expect(nbProjectileFound, equals(2));
+      
+      // clean ..
+      stage.removeAllFromRenderingCycle();
+    });
+
+    /**
+     * TODO : Find a way to emulate Keyboardevent keyUp
+     */
+    test("has a 'onKeyUp' method that take in arguments a KeyboardEvent", (){
+      var ship = new Ship (stage, 0, 0);
+      expect(hasMethod(ship, 'onKeyUp'), isTrue);
+    });
+    
+    /**
+     * TODO : Find a way to emulate Keyboardevent keyUp
+     */
+    test("has a 'destroy' method which call super.destroy and remove keyboard handler", (){
+      var ship = new Ship (stage, 0, 0);
+      expect(hasMethod(ship, 'destroy'), isTrue);
     });
   });
 }

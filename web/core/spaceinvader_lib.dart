@@ -20,6 +20,5 @@ part 'states/gameover.dart';
 
 // models
 part 'images.dart';
-part '../alien.dart';
 part '../bad_alien.dart';
 part '../projectile.dart';

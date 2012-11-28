@@ -37,5 +37,13 @@ Faite passer les tests de la partie "Publisher".
 ### Le chargement des resources
 Si vous avez lancé la page `spaceinvader.html`, vous avez pu constater que le jeux reste en l'état "Loading …" cela viens de la classe **Resources** qui n'est pas encore implémenter. Suivez les intructions de la partie des tests unitaires "Resources" pour passer au niveau suivant !
 
+### Rencontre du troisième type
+Sur la page `spaceinvader.html`, après avoir appuyer sur espace vous arriver dans l'espace ! Et il ne ce passe rien …
+Pimentons le partie en ajoutant des petites bêtes vertes. Retournez dans `web/spaceinvader.test.dart` et implémenter les tests unitaires "Alien"
+
+### Il est temps de vous faire un vaisseau
+Les aliens sont partout ! Retournez vite dans `web/spaceinvader.test.dart` pour vous construire un mega-vaisseau-de-la-mort-qui-tue en implémentant la partie "Ship"
+
+
 ### Remerciements spéciaux
 Je remercie camille@finandsys.com pour la réalisation des sprites permettant d'afficher de magnifiques images plutôt que des rectangles rose fluos.
