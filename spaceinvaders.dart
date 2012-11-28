@@ -17,3 +17,6 @@ class Alien {
 
 class VeryBadAlien{
 }
+
+class Ship {
+}
