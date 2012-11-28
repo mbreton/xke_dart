@@ -4,6 +4,9 @@ XKE Dart
 * Le point d'entré est dans `web/main.dart` lui-même appeler dans la page `spaceinvader.html`
 * Pour lancer un script Dart ou une page Cmd+R (ou Ctrl+R ?)
 
+![Screen](_/img/screen.jpg)
+
+
 ## Introduction
 
 ### Commencons par le Pub
