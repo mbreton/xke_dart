@@ -19,7 +19,7 @@ _* Yaml est sensible à la tabulation_
 
 ### Démarrage du jeux
 La classe Principale de notre jeux est la classe **Stage**. Celle-ci possède un constructeur nommé **fromCanvas** qui comme son nom l'indique nécessite un element canvas pour être utilisé.
-Utilisez donc l'API de sélection d'élément HTML pour récupérer l'élément canvas de la page avec l'id **stage** et passer le en paramètre du constructeur dans le fichier `spaceinvaders.dart` et admirer le résultat.
+Utilisez donc l'API de sélection d'élément HTML pour récupérer l'élément canvas de la page avec l'id **stage** et passer le en paramètre du constructeur dans le fichier `spaceinvaders.html` et admirer le résultat.
 
 Aide : <http://c.dart-examples.com/api/dart-html/query>
 
@@ -28,7 +28,6 @@ Aide : <http://c.dart-examples.com/api/dart-html/query>
 
 * Regarder `spaceinvaders.dart`
 * Et jeter un oeil à `spaceinvaders.test.dart`
-* Enfin l'application est visible en lançant la page `spaceinvaders.html`
 
 ### Vous reprendrez bien un peu de Javascript ?
 
@@ -41,10 +40,10 @@ Si vous avez lancé la page `spaceinvaders.html`, vous avez pu constater que le 
 
 ### Rencontre du troisième type
 Sur la page `spaceinvaders.html`, après avoir appuyer sur espace vous arriver dans l'espace ! Et il ne ce passe rien …
-Pimentons le partie en ajoutant des petites bêtes vertes (et rouge). Retournez dans `spaceinvaders.test.dart` et implémenter les tests unitaires "Alien" et "Very Bad Alien".
+Pimentons le partie en ajoutant des petites bêtes vertes (et rouge). Retournez dans `spaceinvaders.test.dart` et implémenter les tests unitaires **Alien** et **Very Bad Alie**.
 
 ### Il est temps de vous faire un vaisseau
-Les aliens sont partout ! Retournez vite dans `spaceinvaders.test.dart` pour vous construire un mega-vaisseau-de-la-mort-qui-tue en implémentant la partie "Ship".
+Les aliens sont partout ! Retournez vite dans `spaceinvaders.test.dart` pour vous construire un mega-vaisseau-de-la-mort-qui-tue en implémentant la partie **Ship**.
 
 
 ### Remerciements spéciaux
