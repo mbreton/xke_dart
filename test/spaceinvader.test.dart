@@ -216,15 +216,6 @@ void main() {
       expect (alien.x, equals(0));
     });
     
-    test("has a 'mutate' method who return a BadAlien instance builded from Alien himself", (){
-      var alien = new Alien (stage, 11, 22);
-      var badAlien = new BadAlien.fromAlien(alien);
-      
-      expect (badAlien.stage , equals(stage));
-      expect (badAlien.x , equals(11));
-      expect (badAlien.y , equals(22));
-    });
-    
     test("has a 'live' property initialized to 1", (){
       var alien = new Alien (stage, 0, 0);
       expect (alien.life , equals(1));
@@ -242,6 +233,49 @@ void main() {
       alien.life =0;
       expect (alien.isAlive() , isFalse);
     });
+  });
+  
+  group('Very Bad Alien', (){
+    
+    var stage = new Stage.fromCanvas(new Element.tag('canvas'));
+    
+    test("is instiable from an alien and it inherit of Alien", (){
+      var alien = new Alien (stage, 0, 0);
+      var badAlien = new VeryBadAlien.fromAlien(alien);
+      expect (badAlien is Drawable, isTrue);
+    });
+    
+    test("has 2 lifes", (){
+      var alien = new Alien (stage, 0, 0);
+      var badAlien = new VeryBadAlien.fromAlien(alien);
+      expect (badAlien.life, equals(2));
+    });
+    
+    test("has 'img' property initialized with the correct ImageElement", (){
+      var alien = new Alien (stage, 0, 0);
+      var badAlien = new VeryBadAlien.fromAlien(alien);
+      expect (badAlien.img, equals(stage.resources[Images.BAD_ALIEN]));
+    });
+    
+    /**
+     * Implements a 'mutate' method in Alien class who return 
+     * a BadAlien instance builded from Alien himself
+     */
+    test("are created by a mutation of Alien", (){
+      var alien = new Alien (stage, 11, 22);
+      var badAlien = alien.mutate();
+      
+      expect (badAlien.stage , equals(stage));
+      expect (badAlien.x , equals(11));
+      expect (badAlien.y , equals(22));
+    });
+    
+    test("mutate return BadAlien itself", (){
+      var alien = new Alien (stage, 0, 0);
+      var badAlien = new VeryBadAlien.fromAlien(alien);
+      expect (badAlien.mutate(), badAlien);
+    });
+    
   });
 
   group ("Ship", (){

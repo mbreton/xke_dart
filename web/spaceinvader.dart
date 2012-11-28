@@ -63,6 +63,20 @@ class Alien extends Drawable{
   }
 }
 
+class BadAlien extends Alien{
+  
+  var life = 2;
+  
+  BadAlien.fromAlien (Alien alien) : super(alien.stage, alien.x, alien.y){
+    sens = alien.sens;
+    img = resources[Images.BAD_ALIEN];
+  }
+  
+  mutate (){
+    return this;
+  }
+}
+
 class Ship extends Drawable{
   static int width= 34;
   static int height= 25;

@@ -39,10 +39,10 @@ Si vous avez lancé la page `spaceinvader.html`, vous avez pu constater que le j
 
 ### Rencontre du troisième type
 Sur la page `spaceinvader.html`, après avoir appuyer sur espace vous arriver dans l'espace ! Et il ne ce passe rien …
-Pimentons le partie en ajoutant des petites bêtes vertes. Retournez dans `web/spaceinvader.test.dart` et implémenter les tests unitaires "Alien"
+Pimentons le partie en ajoutant des petites bêtes vertes (et rouge). Retournez dans `web/spaceinvader.test.dart` et implémenter les tests unitaires "Alien" et "Very Bad Alien".
 
 ### Il est temps de vous faire un vaisseau
-Les aliens sont partout ! Retournez vite dans `web/spaceinvader.test.dart` pour vous construire un mega-vaisseau-de-la-mort-qui-tue en implémentant la partie "Ship"
+Les aliens sont partout ! Retournez vite dans `web/spaceinvader.test.dart` pour vous construire un mega-vaisseau-de-la-mort-qui-tue en implémentant la partie "Ship".
 
 
 ### Remerciements spéciaux
