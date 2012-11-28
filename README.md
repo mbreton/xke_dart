@@ -1,8 +1,8 @@
 XKE Dart
 ========
 
-* Le point d'entré est dans `main.dart` lui-même appeler dans la page `spaceinvaders.html`
-* Pour lancer un script Dart ou une page Cmd+R (ou Ctrl+R ?)
+* Le point d'entré est **main** est dans la page `spaceinvaders.html`
+* Pour lancer un script Dart ou une page Cmd+R/Ctrl+R
 
 ![Screen](https://raw.github.com/mbreton/xke_dart/master/_/img/screen.jpg)
 
