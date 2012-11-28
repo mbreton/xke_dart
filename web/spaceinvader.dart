@@ -59,15 +59,15 @@ class Alien extends Drawable{
   }
   
   mutate (){
-    return new BadAlien.fromAlien(this);
+    return new VeryBadAlien.fromAlien(this);
   }
 }
 
-class BadAlien extends Alien{
+class VeryBadAlien extends Alien{
   
   var life = 2;
   
-  BadAlien.fromAlien (Alien alien) : super(alien.stage, alien.x, alien.y){
+  VeryBadAlien.fromAlien (Alien alien) : super(alien.stage, alien.x, alien.y){
     sens = alien.sens;
     img = resources[Images.BAD_ALIEN];
   }
