@@ -30,6 +30,7 @@ class Stage {
   CanvasRenderingContext2D get ctx => canvas.context2d;
   
   Stage.fromCanvas (this.canvas){
+   initStepFlags();
    if (this.canvas != null){
       Publisher.updateScore(0);
       resources = new Resources();

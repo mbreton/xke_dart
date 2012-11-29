@@ -25,8 +25,10 @@ class Playing extends State{
   
   init (){
     aliens = new List ();
-    ship = new Ship (stage, (width/2-Ship.width).toInt(), height-Ship.height);
-    stage.addToRenderingCycle(ship);
+    if (flags.contains('shipIsInstanciable')){
+      ship = new Ship (stage, (width/2-Ship.width).toInt(), height-Ship.height);
+      stage.addToRenderingCycle(ship);
+    }
     background = resources[Images.SPACE2];
     score = 0;
     Publisher.updateScore(score);
@@ -35,50 +37,52 @@ class Playing extends State{
   render(time){
     context.drawImage(background, 0, 0, width, height);
     
-    var timeSinceAlienSpawning = time - lastTimeAlienSpawning;
-    if (timeSinceAlienSpawning > MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING){
-      lastTimeAlienSpawning = time;
-      Alien alien = new Alien (stage, 0, 0);
-      aliens.add(alien);
-      stage.addToRenderingCycle(alien);
-    }
-    
-    timeSinceMutation += time- lastTime;
-    if (timeSinceMutation >= DURATION_TO_MUTATE_ALIEN){
-      timeSinceMutation = 0.0;
-      List<Alien> newAliens = new List();
+    if (flags.contains('alienIsInstanciable')){
+      var timeSinceAlienSpawning = time - lastTimeAlienSpawning;
+      if (timeSinceAlienSpawning > MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING){
+        lastTimeAlienSpawning = time;
+        Alien alien = new Alien (stage, 0, 0);
+        aliens.add(alien);
+        stage.addToRenderingCycle(alien);
+      }
       
-      aliens.forEach( (alien) {
-        newAliens.add(alien.mutate());
-        stage.removeFromRenderingCycle(alien);
-      });
-      
-      newAliens.forEach((veryBadAlien){
-        stage.addToRenderingCycle(veryBadAlien);
-      });
-      aliens = newAliens;
-    }
-    stage.drawables.forEach((drawable){
-      if (drawable is Projectile){
-        aliens.forEach( (Alien alien) {
-          if ((drawable as Projectile).hasCollisionWith(alien)){
-            drawable.destroy();
-            alien.decreaseLive();
-            if (!alien.isAlive()){
-              alien.destroy();
-              aliens.removeAt(aliens.indexOf(alien));
-              score += 10;
-            }
-          }
+      timeSinceMutation += time- lastTime;
+      if (timeSinceMutation >= DURATION_TO_MUTATE_ALIEN){
+        timeSinceMutation = 0.0;
+        List<Alien> newAliens = new List();
+        
+        aliens.forEach( (alien) {
+          newAliens.add(alien.mutate());
+          stage.removeFromRenderingCycle(alien);
         });
+        
+        newAliens.forEach((veryBadAlien){
+          stage.addToRenderingCycle(veryBadAlien);
+        });
+        aliens = newAliens;
       }
-    });
-    aliens.forEach( (Alien alien) {
-      if (alien.y + Alien.height > Stage.height){
-        stage.nextState();
-      }
-    });
-    lastTime = time;
-    Publisher.updateScore (score);
+      stage.drawables.forEach((drawable){
+        if (drawable is Projectile){
+          aliens.forEach( (Alien alien) {
+            if ((drawable as Projectile).hasCollisionWith(alien)){
+              drawable.destroy();
+              alien.decreaseLive();
+              if (!alien.isAlive()){
+                alien.destroy();
+                aliens.removeAt(aliens.indexOf(alien));
+                score += 10;
+              }
+            }
+          });
+        }
+      });
+      aliens.forEach( (Alien alien) {
+        if (alien.y + Alien.height > Stage.height){
+          stage.nextState();
+        }
+      });
+      lastTime = time;
+      Publisher.updateScore (score);
+    }
   }
 }
