@@ -1,4 +1,4 @@
-part of spaceinvader;
+part of spaceinvaders;
 
 class Preloading extends State{
   

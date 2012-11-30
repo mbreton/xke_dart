@@ -1,4 +1,4 @@
-part of spaceinvader;
+part of spaceinvaders;
 
 class Playing extends State{
   
@@ -31,7 +31,7 @@ class Playing extends State{
     }
     background = resources[Images.SPACE2];
     score = 0;
-    Publisher.updateScore(score);
+    publisher.setScore(score);
   }
   
   render(time){
@@ -52,8 +52,10 @@ class Playing extends State{
         List<Alien> newAliens = new List();
         
         aliens.forEach( (alien) {
-          newAliens.add(alien.mutate());
-          stage.removeFromRenderingCycle(alien);
+          if (hasMethod(alien,'mutate')){
+            newAliens.add(alien.mutate());
+            stage.removeFromRenderingCycle(alien);
+          }
         });
         
         newAliens.forEach((veryBadAlien){
@@ -67,7 +69,7 @@ class Playing extends State{
             if ((drawable as Projectile).hasCollisionWith(alien)){
               drawable.destroy();
               alien.decreaseLive();
-              if (!alien.isAlive()){
+              if (!alien.isAlive){
                 alien.destroy();
                 aliens.removeAt(aliens.indexOf(alien));
                 score += 10;
@@ -82,7 +84,7 @@ class Playing extends State{
         }
       });
       lastTime = time;
-      Publisher.updateScore (score);
+      publisher.setScore (score);
     }
   }
 }

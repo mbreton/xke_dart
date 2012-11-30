@@ -1,4 +1,4 @@
-part of spaceinvader;
+part of spaceinvaders;
 
 class Stage {
   
@@ -20,19 +20,18 @@ class Stage {
   List<State> states;
   CanvasElement canvas;
   var resources;
+  var publisher;
   List<Drawable> drawables = new List<Drawable>();
-  var _imagePaths = [Images.SHIP,
-                     Images.ALIEN,
-                     Images.BAD_ALIEN,
-                     Images.MISSILE,
-                     Images.SPACE2];
   
   CanvasRenderingContext2D get ctx => canvas.context2d;
   
   Stage.fromCanvas (this.canvas){
    initStepFlags();
    if (this.canvas != null){
-      Publisher.updateScore(0);
+      publisher = new Publisher ();
+      if (hasMethod(publisher,'setScore')){
+        publisher.setScore(0);
+      }
       resources = new Resources();
       
       states = new List<State>()
@@ -44,10 +43,17 @@ class Stage {
       window.requestAnimationFrame(runLoop);
       
       if (hasMethod(resources,'loadImages')){
-        resources.loadImages(_imagePaths).then((images){
-          if (images is List) // to check loadImages state
+        var future = resources.loadImages();
+        if (future != null){ // to avoid NPE
+          future.then((images){
+            if (images is List){ // to check loadImages state
+              images.forEach((image){
+                resources.imgs[image.attributes['src']] = image;
+              });
               nextState();
-        });
+            }
+          });
+        }
       } else{
         resources = new Map<String, Element> ();
       }

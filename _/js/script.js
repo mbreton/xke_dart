@@ -1,7 +1,7 @@
-var nbUpdateScoreLabelCall = 0;
+var nbSetScoreLabel = 0;
 
-var updateScoreLabel = function (scoreLabel){
-	++nbUpdateScoreLabelCall;
+var setScoreLabel = function (scoreLabel){
+	++nbSetScoreLabel;
 	var scoreSpan = document.getElementById('score');
 	scoreSpan.innerHTML = scoreLabel;
 };

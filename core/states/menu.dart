@@ -1,4 +1,4 @@
-part of spaceinvader;
+part of spaceinvaders;
 
 class Menu extends State{
   
@@ -9,7 +9,7 @@ class Menu extends State{
   }
   
   init (){
-    Publisher.updateScore (0);
+    publisher.setScore (0);
     window.on.keyPress.add(keyPressHandler);
   }
   

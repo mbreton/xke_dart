@@ -1,40 +1,38 @@
-part of spaceinvader;
-
-// Write your code in this file
+part of spaceinvaders;
 
 class Publisher {
   
-  static updateScore (int score){
+  var scoreLabel= "";
+  
+  setScore (int score){
+    scoreLabel = "${score} Point${score > 1 ? 's': ''}";
     js.scoped(() {
-      var scoreLabel = "${score} Point${score > 1 ? 's': ''}";
-      js.context.updateScoreLabel(scoreLabel);
+      js.context.setScoreLabel(scoreLabel);
     });
   }
 }
 
-
 class Resources {
+  Map imgs = {};
   
-  var imgs = new Map();
+  Element operator [](String key) => imgs[key];
   
-  Element operator [] (String path) => imgs[path];
-  
-  Future loadImages (List<String> paths){
-    return Futures.wait( paths.map((path)  => Images.loadImage (path) ))
-        ..transform((List<Element> images) => images.forEach((Element image) {
-         imgs[image.attributes['src']] = image; 
-      })
-    );
+  Future loadImages (){
+    return Futures.wait([
+         Images.loadImage(Images.SHIP),
+         Images.loadImage(Images.ALIEN),
+         Images.loadImage(Images.BAD_ALIEN),
+         Images.loadImage(Images.PROJECTILE),
+         Images.loadImage(Images.SPACE2)
+    ]);
   }
 }
 
 class Alien extends Drawable{
-  
   static final height = 30;
   static final width = 30;
   var sens = 1;
   var life = 1;
-  var img;
   
   Alien (stage, [x, y]): super(stage, x, y){
     img = resources[Images.ALIEN];
@@ -47,24 +45,22 @@ class Alien extends Drawable{
       sens *= -1;
     }
     x += (time * 0.4 * sens).toInt();
-    context.drawImage(img, x, y);
+    super.render(time);
   }
   
   decreaseLive (){
     life--;
   }
   
-  isAlive (){
-    return life > 0;
-  }
-  
   mutate (){
     return new VeryBadAlien.fromAlien(this);
   }
+  
+  get isAlive => life > 0;
+  
 }
 
 class VeryBadAlien extends Alien{
-  
   var life = 2;
   
   VeryBadAlien.fromAlien (Alien alien) : super(alien.stage, alien.x, alien.y){
@@ -81,7 +77,6 @@ class Ship extends Drawable{
   static int width= 34;
   static int height= 25;
   static const SPEED= 10;
-  var img;
   var keyUpHandler;
   
   Ship(Stage stage, [int x, int y]) : super(stage, x, y){
@@ -91,7 +86,7 @@ class Ship extends Drawable{
   }
   
   render(time){
-    context.drawImage(img, x, y, width, height);
+    super.render(time);
   }
   
   destroy(){

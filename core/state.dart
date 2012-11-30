@@ -1,4 +1,4 @@
-part of spaceinvader;
+part of spaceinvaders;
 
 abstract class State extends Stagable{
   
