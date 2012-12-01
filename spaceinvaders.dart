@@ -6,11 +6,12 @@ class Publisher {
 class Resources {
 }
 
-class Alien {
+class Alien{
 }
 
 class VeryBadAlien{
+  
 }
 
-class Ship {
+class Ship{
 }
