@@ -46,9 +46,10 @@ void main() {
 
     test("update correctly the span with a given score", (){
       /**
-       * To valid this test call the Javascript function 'updateScoreLabel' defined in the file '_/js/script.js'
+       * To valid this test, call the Javascript function 
+       * 'nbSetScoreLabel' defined in the file '_/js/script.js'
        * 
-       * To understand how to call a js function from Dart:
+       * To understand how to call a Javascript function from Dart:
        * http://dart-lang.github.com/js-interop/docs/js.html
        * 
        * Once finished, you can see the result on spaceinvaders.html, the red label is initialized with '0 Point'
@@ -123,10 +124,10 @@ void main() {
       var future = res.loadImages();
       
       expect(future, isNotNull); // assert the returned value is not null
-      future.then((imageLoaded){ // assert that the loaded ImageElement has the "src" attribute that ship image path
+      future.then(expectAsync1((imageLoaded){ // assert that the loaded ImageElement has the "src" attribute that ship image path
         if (imageLoaded is ImageElement)
           expect(imageLoaded.attributes['src'], equals(Images.SHIP));
-      });
+      }));
     });
     
     test("loadImages return a Futur instance of all images loading", (){
@@ -147,7 +148,7 @@ void main() {
       
       expect(future, isNotNull); // assert the returned value is not null
       
-      future.then( (imagesLoaded){
+      future.then(expectAsync1((imagesLoaded){
         
         /* the future returned by loadImages must return a asynchronous result
          * of type List<ImageElement> now
@@ -164,7 +165,7 @@ void main() {
         expect(imagePaths.contains(Images.BAD_ALIEN), isTrue);
         expect(imagePaths.contains(Images.PROJECTILE), isTrue);
         expect(imagePaths.contains(Images.SPACE2), isTrue);
-      });
+      }));
     });
 
   });
@@ -180,52 +181,61 @@ void main() {
     test("has a static 'width' property initialized at 30", (){
       expect (Alien.width , equals(30));
     });
-
-    test("is instiable and it inherit of Drawable", (){
+    
+    test("is instantiable and inherit of Drawable", (){
+        /**
+         * For information, in each Drawable is injected :
+         *  - An instance of Resources accessible by a property 'resources'
+         *  - The Stage instance (it contains the width and the height of the area)
+         *  - The current x, y position
+         *  
+         *  The constructor should take in parameter the Stage of game, and its x, y position
+         * 
+         * Documentation about inheritance in Dart:
+         * http://c.dart-examples.com/learn/class/class-inheritance
+         */
         var alien = new Alien (stage, 0, 0);
         expect (alien is Drawable, isTrue);
     });
 
     test("has 'img' property initialized in the constructor with the correct ImageElement", (){
       /**
-       * In each Drawable is injected :
-       *  - An instance of Resources accessible by a property called 'resources'
-       *  - A 'context' variable of type CanvasRenderingContext2D
-       *  - The Stage instance (it contains the width and the height of the area)
-       *  - The current x, y position
-       *  
-       * The core of game have initialised images in resources for you
+       * The core of game have initialised images in 'resources' for you
        * Initialize img with 'resources' property.
        * 
-       * Remimber that you can use [] operator with one
-       *  of path defined in Images class.
-       */ 
+       * Remimber that you can use [] operator with one of path defined in Images class.
+       */
       var alien = new Alien (stage, 0, 0);
       expect (alien.img, equals(stage.resources[Images.ALIEN]));
     });
     
     test("override a 'render' method that take in arguments a double", (){
       /**
-       * Don't forget to call super.render, if not, you will not see the image!
+       * Don't forget to call super.render, if not, you will not see the image of Aliens!
        */
       var alien = new Alien (stage, 0, 0);
       expect(hasMethod(alien, 'render'), isTrue);
       expect(alien.render(0.0), isNull);// to test type of parameter
     });
     
-    test("override render method, and compute x to traverse stage from left to right in 1.5s", (){
+    test("in render method compute x to traverse stage from left to right in 1.5s", (){
       /**
-       * At the end, the aliens must cross the stage like that :
-       * +=========================+
-       * !A----->----->----->-----v!
-       * !v-----<-----<-----<------!
-       * !------>----->----->-----v!
-       * !<-----<-----<-----<------!
-       * +=========================+
+       * The goal of five next tests is that 
+       * the aliens must cross the stage like that :
+       * 
+       * +-----------------------------> (x)
+       * |  +=========================+
+       * |  !A----->----->----->-----v!
+       * |  !v-----<-----<-----<------!
+       * |  !------>----->----->-----v!
+       * |  !<-----<-----<-----<------!
+       * |  +=========================+
+       * v
+       * (y)
        * 
        * Firstly we defined that a alien cross the stage in 1,5s.
        * Knowing that 'render' method receive the time 
-       * elapsed betwen two of it. Implement the method
+       * elapsed betwen two call of it. Implement the method
        * to change x like expected in the tests.
        * 
        * WARNING : Prefer to place super.render at the end of the method!
@@ -233,25 +243,43 @@ void main() {
       var alien = new Alien (stage, 0, 0);
       expect (alien.x, equals(0));
 
-      // During 100ms an alien should crossed 40px
+      // During 100ms an alien should move of 40
       alien.render(100.0);
       expect (alien.x, equals(40));
 
-      // During 100+400ms an alien should crossed 40+160px
+      // During 100+400ms an alien should move of 40+160
       alien.render(400.0);
       expect (alien.x, equals(200));
 
-      // During 100+400+1000ms an alien should crossed 40+160+400px
-      alien.render(1000.0);
-      expect (alien.x, equals(600));
+      // During 100+400+925ms an alien should move of 40+160+400
+      alien.render(925.0);
+      expect (alien.x, equals(570));
     });
-
-    test("compute y to step down of 40 when x is out of stage", (){
+    
+    test("compute x to traverse stage from left to right, but not hight above the Stage width", (){
+      /**
+       * Here we check that the Alien don't go outside the stage
+       * (the width of stage is available in the Stage class)
+       */ 
       var alien = new Alien (stage, 0, 0);
       expect (alien.y, equals(0));
 
-      alien.render(1500.0);
-      alien.render(1.0);
+      alien.render(1425.0); // arrived to limit
+      alien.render(10.0); // try to go outside
+
+      // x should be equal to the width of stage minus the with of the alien
+      expect (alien.x, equals(570));
+    });
+
+    test("compute y to step down of 40 when we are on the right border", (){
+      /**
+       * When we are on the right border, we step down of 40
+       */
+      var alien = new Alien (stage, 0, 0);
+      expect (alien.y, equals(0));
+
+      alien.render(1425.0); // arrived to limit
+      alien.render(10.0); // try to go outside
 
       // x should be equal to the width of stage minus the with of the alien
       expect (alien.x, equals(570));
@@ -259,22 +287,33 @@ void main() {
       expect (alien.y, equals(40));
     });
 
-    test("compute x to go in the other sens when step down", (){
+    test("compute x to go in the other direction when step down", (){
+      /**
+       * When we are on the right border, it changes direction too
+       */
+      var alien = new Alien (stage, 0, 0);
+
+      alien.render(1425.0);// go to right border
+      alien.render(100.0);// change direction
+      expect (alien.x, equals(570));
+      
+      alien.render(1425.0); // comeback to left border
+      expect (alien.x, equals(0));
+    });
+    
+    test("compute x to go in the other direction but not under zero", (){
       /**
        * Last test of alien rendering, check your page after to have finished
        * and see the invasion ...
        */
       var alien = new Alien (stage, 0, 0);
 
-      // go to right border
-      alien.render(1500.0);
-      expect (alien.x, equals(600));
+      alien.render(1425.0);// go to right border
+      alien.render(100.0);// change direction
+      expect (alien.x, equals(570));
 
-      // come back to center
-
-      // continue to comeback ...
-      alien.render(1500.0);
-      alien.render(1.0);
+      alien.render(1425.0); // comeback to left
+      alien.render(10.0); // try to go outside
       expect (alien.x, equals(0));
     });
 
@@ -305,7 +344,7 @@ void main() {
 
     var stage = new Stage.fromCanvas(new Element.tag('canvas'));
 
-    test("is instiable from an alien and inherit of Alien", (){
+    test("is instantiable from an alien and inherit of Alien", (){
       /**
        * For this test you will must inherite of Alien in first time
        * and in second time, create a named constructor.
@@ -313,8 +352,6 @@ void main() {
        * initialize the VeryBadAlien properties from alien
        * properties, you can find a exameple here:
        * http://c.dart-examples.com/learn/class/constructors/named-constructor
-       * And here for handle inheritance of Alien in same time:
-       * http://c.dart-examples.com/learn/class/constructors/constructor-inheritance
        */
       var alien = new Alien (stage, 0, 0);
       var badAlien = new VeryBadAlien.fromAlien(alien);
@@ -376,7 +413,7 @@ void main() {
       expect (Ship.width , equals(34));
     });
 
-    test("inherit of Drawable and is instiable", (){
+    test("inherit of Drawable and is instantiable", (){
         var ship = new Ship (stage, 0, 0);
         expect (ship is Drawable, isTrue);
     });

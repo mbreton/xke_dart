@@ -6,8 +6,17 @@ class Images {
   static const String SHIP       = "_/img/ship.png";
   static const String ALIEN      = "_/img/normal-alien.png";
   static const String BAD_ALIEN  = "_/img/bad-alien.png";
-  static const String PROJECTILE    = "_/img/missile.png";
+  static const String PROJECTILE = "_/img/projectile.png";
   static const String SPACE2     = "_/img/space2.png";
+  
+  // return all image declared in Images for more convenience
+  static get allPaths => [
+                   Images.SHIP,
+                   Images.ALIEN,
+                   Images.BAD_ALIEN,
+                   Images.PROJECTILE,
+                   Images.SPACE2
+                   ];
   
   /**
    * This method load an image with a given path
