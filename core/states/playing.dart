@@ -5,17 +5,14 @@ class Playing extends State{
   const MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING = 600;
   const DURATION_TO_MUTATE_ALIEN = 10000;
   
-  double lastTime = 0.0;
   double lastTimeAlienSpawning = 0.0;
-  double timeSinceMutation= 0.0;
+  double lastTimeAlienMutation = 0.0;
   List<Alien> aliens;
   Ship ship;
   int score=0;
   var background;
   
-  Playing(stage) : super(stage){
-    
-  }
+  Playing(stage) : super(stage);
   
   destroy(){
     ship.destroy();
@@ -32,59 +29,69 @@ class Playing extends State{
     background = resources[Images.SPACE2];
     score = 0;
     publisher.setScore(score);
+    lastTimeAlienSpawning = 0.0;
+    lastTimeAlienMutation = 0.0;
   }
   
   render(time){
     context.drawImage(background, 0, 0, width, height);
     
+    // init if necessary
+    if (lastTimeAlienMutation == 0) lastTimeAlienMutation = time;
+    if (lastTimeAlienSpawning == 0) lastTimeAlienSpawning = time;
+       
+    // count time since events
+    var timeSinceMutation = time - lastTimeAlienMutation;
+    var timeSinceAlienSpawning = time - lastTimeAlienSpawning;
+    
+    // alien spwaning
     if (flags.contains('alienIsInstanciable')){
-      var timeSinceAlienSpawning = time - lastTimeAlienSpawning;
       if (timeSinceAlienSpawning > MIN_ELAPSED_TIME_BETWEEN_ALIEN_SPWANING){
         lastTimeAlienSpawning = time;
         Alien alien = new Alien (stage, 0, 0);
         aliens.add(alien);
         stage.addToRenderingCycle(alien);
       }
-      
-      timeSinceMutation += time- lastTime;
-      if (timeSinceMutation >= DURATION_TO_MUTATE_ALIEN){
-        timeSinceMutation = 0.0;
-        List<Alien> newAliens = new List();
-        
-        aliens.forEach( (alien) {
-          if (hasMethod(alien,'mutate')){
-            newAliens.add(alien.mutate());
-            stage.removeFromRenderingCycle(alien);
-          }
-        });
-        
-        newAliens.forEach((veryBadAlien){
-          stage.addToRenderingCycle(veryBadAlien);
-        });
-        aliens = newAliens;
+    }
+    
+    aliens.forEach( (Alien alien) {
+      // if an alien step under stage, it's a game over
+      if (alien.y + Alien.height > Stage.height){
+        stage.nextState();
+        return;
       }
+      
+      // aliens mutation
+      if (flags.contains('alienIsInstanciable')){
+        if (timeSinceMutation >= DURATION_TO_MUTATE_ALIEN){
+          lastTimeAlienMutation = time;
+          
+          if (hasMethod(alien,'mutate')){
+            alien.destroy();
+            var vbAlien = alien.mutate();
+            aliens[aliens.indexOf(alien)] = vbAlien;
+            stage.addToRenderingCycle(vbAlien);
+          }
+        }
+      }
+      
+      // apply damages on the aliens
       stage.drawables.forEach((drawable){
         if (drawable is Projectile){
-          aliens.forEach( (Alien alien) {
-            if ((drawable as Projectile).hasCollisionWith(alien)){
-              drawable.destroy();
-              alien.decreaseLive();
-              if (!alien.isAlive){
-                alien.destroy();
-                aliens.removeAt(aliens.indexOf(alien));
-                score += 10;
-              }
+          if ((drawable as Projectile).hasCollisionWith(alien)){
+            drawable.destroy();
+            alien.decreaseLive();
+            if (!alien.isAlive){
+              alien.destroy();
+              aliens.removeAt(aliens.indexOf(alien));
+              score += 10;
             }
-          });
+          }
         }
       });
-      aliens.forEach( (Alien alien) {
-        if (alien.y + Alien.height > Stage.height){
-          stage.nextState();
-        }
-      });
-      lastTime = time;
-      publisher.setScore (score);
-    }
+    });
+    
+    // update score ...
+    publisher.setScore (score);
   }
 }
