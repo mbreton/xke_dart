@@ -18,13 +18,7 @@ class Resources {
   Element operator [](String key) => imgs[key];
   
   Future loadImages (){
-    return Futures.wait([
-         Images.loadImage(Images.SHIP),
-         Images.loadImage(Images.ALIEN),
-         Images.loadImage(Images.BAD_ALIEN),
-         Images.loadImage(Images.PROJECTILE),
-         Images.loadImage(Images.SPACE2)
-    ]);
+    return Futures.wait(Images.allPaths.map((path) => Images.loadImage(path)));
   }
 }
 
@@ -39,12 +33,13 @@ class Alien extends Drawable{
   }
   
   render (double time){
-    if (x < 0 || x + width > Stage.width){
-      x = (x < 0) ? 0 : Stage.width - width;
-      y += 40;
-      sens *= -1;
+    var nextX = x + (time * 0.4 * sens).toInt();
+    if (nextX <= Stage.width - width && nextX >= 0){
+      x = nextX;
+    } else{
+      y+=40;
+      sens *=-1;
     }
-    x += (time * 0.4 * sens).toInt();
     super.render(time);
   }
   
@@ -57,7 +52,6 @@ class Alien extends Drawable{
   }
   
   get isAlive => life > 0;
-  
 }
 
 class VeryBadAlien extends Alien{
@@ -93,7 +87,6 @@ class Ship extends Drawable{
     super.destroy();
     window.on.keyUp.remove(keyUpHandler);
   }
-  
   moveLeft(){
     var nextX = x - SPEED;
     x = (nextX >=  0) ? nextX : 0;
