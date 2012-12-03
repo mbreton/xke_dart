@@ -6,6 +6,9 @@ class Stage {
   static int height= 400;
   
   int _currentStateIdx=0;
+  int fps = 0;
+  double lastFpsUpdateTime = 0.0;
+  
   set currentStateIdx (int val){
     if (val != _currentStateIdx)
     {
@@ -61,6 +64,16 @@ class Stage {
   }
   
   runLoop (double time){
+    if (lastFpsUpdateTime == 0.0 || (time-lastFpsUpdateTime) >= 1000){
+      lastFpsUpdateTime = time;
+      query('#fps')
+          ..innerHTML= "$fps FPS"
+          ..classes= ['label',
+             'label-${fps >= 60 ? 'success': fps >= 40 ? 'info': 'important'}'
+           ];
+      fps=0;
+    }
+    fps++;
     currentState.render(time);
     drawables.forEach((drawable) => drawable.refresh(time));
     window.requestAnimationFrame(runLoop);
