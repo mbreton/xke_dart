@@ -138,6 +138,10 @@ void main() {
        * acts as a Join/Fork, it's will waiting any Future 
        * to return a global Future of them.
        * 
+       * Chuck norris mode (not necessary): If your are a killer instead of make a list with
+       * wich image you can use the Images.allPaths getter to retreive the complete
+       * list but you will need to make a map (http://www.dartlang.org/docs/dart-up-and-running/ch03.html#ch03-common-collection-methods)
+       * 
        * API doc about Futures class :
        * http://api.dartlang.org/docs/bleeding_edge/dart_core/Futures.html
        */
@@ -497,18 +501,43 @@ void main() {
       stage.removeAllFromRenderingCycle();
     });
 
-    /**
-     * TODO : Find a way to emulate Keyboardevent keyUp
-     */
     test("has a 'onKeyUp' method that take in arguments a KeyboardEvent", (){
+      /**
+       * Dart can't yet emulate a keyboard event, so from this point 
+       * you are really in TDD mode ...
+       * But the first step, will be to create a onKeyUp 
+       * method who take a KeyBoardEvent type in argument
+       * 
+       * In the same time, implement "onKeyUp" to execute "moveLeft" if the "keyCode" property is equals to "KeyCode.LEFT", 
+       * execute "moveRight" if the "keyCode" property is equals to "KeyCode.RIGHT" and execute "fire" if the "keyCode" 
+       * property is equals to "KeyCode.SPACE"
+       */
       var ship = new Ship (stage, 0, 0);
       expect(hasMethod(ship, 'onKeyUp'), isTrue);
     });
+    
+    test("has a 'keyUpHandler' property who contains a reference to keyUpHandler method", (){
+      /**
+       * Take a look in the wtf.test.dart, run it! Yes, is true ...
+       * This problem will compels us to save the reference of our handler "onKeyUp" in
+       * a class property named "keyUpHandler"
+       * Save "onKeyUp" method in the "keyUpHandler" in the constructor.
+       */
+      var ship = new Ship (stage, 0, 0);
+      expect(ship.keyUpHandler, isNotNull);
+    });
 
-    /**
-     * TODO : Find a way to emulate Keyboardevent keyUp
-     */
     test("has a 'destroy' method which call super.destroy and remove keyboard handler", (){
+      /**
+       * Now it's time to add and remove you handler to window's keyUp event
+       * 
+       * You will add the handler "keyUpHandler" to the keyUp event 
+       * in the constructor, and remove it in the destroy method
+       * that you have overrided(call super.destroy too)
+       * 
+       * You can search on the synonym page to see how add an handler of event:
+       * http://synonym.dartlang.org/
+       */
       var ship = new Ship (stage, 0, 0);
       expect(hasMethod(ship, 'destroy'), isTrue);
     });

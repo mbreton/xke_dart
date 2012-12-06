@@ -1,7 +1,6 @@
 part of spaceinvaders;
 
 class Publisher {
-  
   var scoreLabel= "";
   
   setScore (int score){
