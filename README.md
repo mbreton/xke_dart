@@ -6,6 +6,7 @@ XKE Dart
 
 ![Screen](https://raw.github.com/mbreton/xke_dart/master/_/img/screen.jpg)
 
+[![](https://drone.io/mbreton/Xke-dart/status.png)](https://drone.io/mbreton/Xke-dart/latest)
 
 ## Introduction
 
