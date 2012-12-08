@@ -2,4 +2,5 @@ name:  Space Invaders powered by Dart !
 description:  Aliens are comming
 
 dependencies:
-  
+  unittest: 0.2.7
+  js: 0.0.13
