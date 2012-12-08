@@ -1,14 +1,13 @@
-import 'package:/unittest/unittest.dart';
-import 'package:/unittest/html_enhanced_config.dart';
+import 'package:unittest/unittest.dart';
+import 'package:unittest/vm_config.dart';
 
-import 'core/spaceinvader_lib.dart';
-import 'dart:html';
+import 'core/spaceinvader_test_lib.dart';
 import 'dart:isolate';
-import 'package:js/js.dart' as js;
 
 void main() {
 
-  useHtmlEnhancedConfiguration();
+  //useHtmlEnhancedConfiguration();
+  useVmConfiguration();
 
   group ("Publisher", (){
     
@@ -42,29 +41,6 @@ void main() {
       
       publisher.setScore(5);
       expect(publisher.scoreLabel,equals("5 Points"));
-    });
-
-    test("update correctly the span with a given score", (){
-      /**
-       * To valid this test, call the Javascript function 
-       * 'nbSetScoreLabel' defined in the file '_/js/script.js'
-       * 
-       * To understand how to call a Javascript function from Dart:
-       * http://dart-lang.github.com/js-interop/docs/js.html
-       * 
-       * Once finished, you can see the result on spaceinvaders.html, the red label is initialized with '0 Point'
-       */
-      // reset the number of call of the js function (used only for assertion)
-      js.scoped(() => js.context.nbSetScoreLabel = 0);
-      var publisher = new Publisher ();
-
-      publisher.setScore(1);
-      js.scoped(() => expect (js.context.nbSetScoreLabel, equals(1)) ); // assert the number of call of JS function
-      expect (query('#score').innerHTML, equals('1 Point'));
-
-      publisher.setScore(10);
-      js.scoped(() => expect (js.context.nbSetScoreLabel, equals(2)) ); // assert the number of call of JS function
-      expect (query('#score').innerHTML, equals('10 Points'));
     });
   });
 
@@ -110,68 +86,7 @@ void main() {
       expect(hasMethod (res, 'loadImages'), isTrue);
     });
     
-    test("loadImages return a Futur instance of one image loading", (){
-      /**
-       * Looks Images class in the "core/images.dart", you will 
-       * see a method "loadImage" who return a Future instance.
-       * 
-       * To pass this test simply call method "Images.loadImage"
-       * with Images.SHIP in arguments and return the "loadImages".
-       */
-      var res = new Resources();
-      expect(hasMethod (res, 'loadImages'), isTrue);
-      
-      var future = res.loadImages();
-      
-      expect(future, isNotNull); // assert the returned value is not null
-      future.then(expectAsync1((imageLoaded){ // assert that the loaded ImageElement has the "src" attribute that ship image path
-        if (imageLoaded is ImageElement)
-          expect(imageLoaded.attributes['src'], equals(Images.SHIP));
-      }));
-    });
-    
-    test("loadImages return a Futur instance of all images loading", (){
-      /**
-       * Congrats you are just handle your first image loading thanks to Future.
-       * The second step now it's to load all Images defined in the Images class.
-       * To do that, you will need to use the 'Futures.wait' method. This method
-       * acts as a Join/Fork, it's will waiting any Future 
-       * to return a global Future of them.
-       * 
-       * Chuck norris mode (not necessary): If your are a killer instead of make a list with
-       * wich image you can use the Images.allPaths getter to retreive the complete
-       * list but you will need to make a map (http://www.dartlang.org/docs/dart-up-and-running/ch03.html#ch03-common-collection-methods)
-       * 
-       * API doc about Futures class :
-       * http://api.dartlang.org/docs/bleeding_edge/dart_core/Futures.html
-       */
-      var res = new Resources();
-      expect(hasMethod (res, 'loadImages'), isTrue);
-      
-      var future = res.loadImages();
-      
-      expect(future, isNotNull); // assert the returned value is not null
-      
-      future.then(expectAsync1((imagesLoaded){
-        
-        /* the future returned by loadImages must return a asynchronous result
-         * of type List<ImageElement> now
-         */
-        expect(imagesLoaded is List<ImageElement>, isTrue);
-        
-        // build a list of path of loaded images by the 'loadImages' method
-        var imagePaths = imagesLoaded.map((image) => image.attributes['src'] );
-        
-        // assert that all images has been loaded
-        expect(imagePaths.length, equals(5));
-        expect(imagePaths.contains(Images.SHIP), isTrue);
-        expect(imagePaths.contains(Images.ALIEN), isTrue);
-        expect(imagePaths.contains(Images.BAD_ALIEN), isTrue);
-        expect(imagePaths.contains(Images.PROJECTILE), isTrue);
-        expect(imagePaths.contains(Images.SPACE2), isTrue);
-      }));
-    });
-
+   
   });
 
   group ("Alien", (){
