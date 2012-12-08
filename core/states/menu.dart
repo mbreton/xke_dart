@@ -25,7 +25,7 @@ class Menu extends State{
   }
   
   onKeyPress (KeyboardEvent event){
-    if (event.charCode == KeyCode.SPACE){ 
+    if (event.keyCode == KeyCode.SPACE){ 
       nextState();
     }
   }

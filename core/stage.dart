@@ -66,11 +66,13 @@ class Stage {
   runLoop (double time){
     if (lastFpsUpdateTime == 0.0 || (time-lastFpsUpdateTime) >= 1000){
       lastFpsUpdateTime = time;
-      query('#fps')
-          ..innerHTML= "$fps FPS"
+      var fpsEl = query('#fps');
+      if (fpsEl != null){
+          fpsEl..innerHTML= "$fps FPS"
           ..classes= ['label',
              'label-${fps >= 60 ? 'success': fps >= 40 ? 'info': 'important'}'
            ];
+      }
       fps=0;
     }
     fps++;
